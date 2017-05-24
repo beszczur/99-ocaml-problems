@@ -38,25 +38,18 @@ let print_list l =
 	in
 		printf "%s" ( "[ "^(f l)^" ]");;
 		
-(*let rec remove_value value l =
-	match l with
-    | [] -> []
-    | head :: tail -> if head = value then tail else head :: remove_value value tail;;*)
-    
 let rec remove_value value l =
-(* 	let p = ref l in *)
-		match l with
-		| [] -> []
-		| head :: tail -> if head = value then tail else head :: remove_value value tail;;
-	(*!p*)
+	match l with
+	| [] -> []
+	| head :: tail -> if head = value then tail else head :: remove_value value tail;;
 
 let print_board board =
 	for i = 0 to 8 do
 		printf "|";
 		for j = 0 to 8 do
 			if board.(i).(j).value == 0 then
-			(*printf "   |"*)
-			print_list board.(i).(j).possibilities
+			printf "   |"
+(* 			print_list board.(i).(j).possibilities *)
 			(*printf "%s" (" "^(print_list board.(i).(j).possibilities)^" |")*)
 			else 
 			printf " %s |" (string_of_int (board.(i).(j).value)); 
@@ -80,9 +73,22 @@ let of_file fname board =
 let isValueAllowedInRow board x y value =
 	for i = 0 to 8 do
 		if board.(x).(i).value == value then
-			printf "false"
+			printf "false\n"
 	done;;
-			
+
+let isValueAllowedInColumn board x y value =
+	for i = 0 to 8 do
+		if board.(i).(y).value == value then
+			printf "false\n"
+	done;;
+
+let isValueAllowedInSquare board x y value =
+	for i = 3*(x/3) to 3*(x/3)+2 do
+		for j = 3*(y/3) to 3*(y/3)+2 do
+			if board.(i).(j).value == value then
+				printf "false\n"
+		done;
+	done;;
 
 let initial_fileld = { value = 0; possibilities = range 1 9 };;
 let board = make_matrix 9 9 initial_fileld;;
@@ -96,7 +102,12 @@ let example2 = remove_value 2 example;;
 print_list example2;;
 printf "\n";;
 
+printf "ROW: ";;
 isValueAllowedInRow board 0 2 8;;
+printf "COLUMN: ";;
+isValueAllowedInColumn board 0 2 8;;
+printf "SQUARE: ";;
+isValueAllowedInSquare board 0 2 8;;
 
 (* :( *)
 
